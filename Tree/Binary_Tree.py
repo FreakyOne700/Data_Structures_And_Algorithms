@@ -27,12 +27,12 @@ def inorder(root):
     print(root.data)
     inorder(root.rightChild)
     
-def levelorder(root):
-    if not root:
+def levelorder(rootNode):
+    if not rootNode:
         return
     else:
         queue = QueueLL.Queue()
-        queue.enqueue(root)
+        queue.enqueue(rootNode)
         while not (queue.isEmpty()):
             root = queue.dequeue()
             print(root.value.data)
@@ -41,12 +41,12 @@ def levelorder(root):
             if (root.value.rightChild is not None):
                 queue.enqueue(root.value.rightChild)
 
-def searchBT(root,item):
-    if not root:
+def searchBT(rootNode,item):
+    if not rootNode:
         return
     else:
         queue = QueueLL.Queue()
-        queue.enqueue(root)
+        queue.enqueue(rootNode)
         while not (queue.isEmpty()):
             root = queue.dequeue()
             if root.value.data == item:
@@ -57,12 +57,12 @@ def searchBT(root,item):
                 queue.enqueue(root.value.rightChild)
         return "Not Found"
 
-def insertBT(root,item):
-    if not root:
+def insertBT(rootNode,item):
+    if not rootNode:
         return
     else:
         queue = QueueLL.Queue()
-        queue.enqueue(root)
+        queue.enqueue(rootNode)
         while not (queue.isEmpty()):
             root = queue.dequeue()
             if (root.value.leftChild is not None):
@@ -76,6 +76,70 @@ def insertBT(root,item):
                 root.value.rightChild = item
                 return "Successfully Inserted"
         return "Failed to add"   
+    
+def getDeepestNode(rootNode):
+    if not rootNode:
+        return 
+    else:
+        queue = QueueLL.Queue()
+        queue.enqueue(rootNode)
+        while not queue.isEmpty():
+            root = queue.dequeue()
+            if root.value.leftChild is not None:
+                queue.enqueue(root.value.leftChild)
+            
+            if root.value.rightChild is not None:
+                queue.enqueue(root.value.rightChild)
+        deepestnode = root.value
+        return deepestnode
+
+def deleteDeepestNode(rootNode,dNode):
+    if not rootNode:
+        return
+    else:
+        queue = QueueLL.Queue()
+        queue.enqueue(rootNode)
+        while not queue.isEmpty():
+            root = queue.dequeue()
+            if root.value is dNode:
+                root.value = None
+                return 
+            if root.value.rightChild:
+                if root.value.rightChild is dNode:
+                    root.value.rightChild = None
+                    return
+                else:
+                    queue.enqueue(root.value.rightChild)
+            if root.value.leftChild:
+                if root.value.leftChild is dNode:
+                    root.value.leftChild = None
+                    return
+                else:
+                    queue.enqueue(root.value.leftChild)
+    
+def deleteNodeBT(rootNode,item):
+    if not rootNode:
+        return 
+    else:
+        queue = QueueLL.Queue()
+        queue.enqueue(rootNode)
+        while not queue.isEmpty():
+            root = queue.dequeue()
+            if root.value.data == item:
+                dNode = getDeepestNode(rootNode)
+                root.value.data = dNode.data
+                deleteDeepestNode(rootNode,dNode)
+                return "Node Deleted"
+            if (root.value.leftChild is not None):
+                queue.enqueue(root.value.leftChild)
+            if (root.value.rightChild is not None):
+                queue.enqueue(root.value.rightChild)
+        return "Failed"
+
+def deleteBT(root):
+    root.value = None
+    root.leftChild = None
+    root.rightChild = None
 
 tree = TreeNode(1)
 tree.leftChild = TreeNode(2)
@@ -84,5 +148,6 @@ tree.leftChild.rightChild = TreeNode(5)
 tree.leftChild.leftChild = TreeNode(4)
 tree.rightChild.leftChild = TreeNode(6)
 tree.rightChild.rightChild = TreeNode(7)
-print(insertBT(tree,TreeNode(10)))
+levelorder(tree)
+deleteNodeBT(tree,2)
 levelorder(tree)
