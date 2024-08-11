@@ -1,4 +1,4 @@
-import Tree.Binary_Tree.QueueLinkedList as QueueLL
+import QueueLinkedList as QueueLL
 
 class TreeNode:
     def __init__(self,data):
@@ -6,20 +6,20 @@ class TreeNode:
         self.leftChild = None
         self.data = data
 
-def insertNode(root,item):
-    if root.data == None:
-        root.data = item
+def insertNode(root, item):
+    if root is None:
+        return TreeNode(item)
     elif item <= root.data:
-        if root.leftChild == None:
+        if root.leftChild is None:
             root.leftChild = TreeNode(item)
         else:
-            insertNode(root.leftChild,item)
+            insertNode(root.leftChild, item)
     else:
-        if root.rightChild == None:
+        if root.rightChild is None:
             root.rightChild = TreeNode(item)
         else:
-            insertNode(root.rightChild,item)
-    return "Inserted Successfully"
+            insertNode(root.rightChild, item)
+    return root
 
 def searchNode(root,item):
     if root.data == item:
@@ -34,7 +34,36 @@ def searchNode(root,item):
             print("Found")
         else:
             searchNode(root.rightChild,item)
-    
+
+def minValueNode(bstNode):
+    current = bstNode
+    while current.leftChild is not None:
+        current = current.leftChild
+    return current
+
+def deleteNode(root,node):
+    if not root:
+        return root
+    if node < root.data:
+        root.leftChild = deleteNode(root.leftChild,node)
+    elif node > root.data:
+        root.rightChild = deleteNode(root.rightChild,node)
+    else:
+        if root.leftChild is None:
+            temp = root.rightChild
+            root = None
+            return temp
+        
+        if root.rightChild is None:
+            temp = root.leftChild
+            root = None
+            return temp
+        
+        temp = minValueNode(root.rightChild)
+        root.data = temp.data
+        root.rightChild = deleteNode(root.rightChild,temp.data)
+    return root
+
 def preorder(root):
     if not root:
         return
@@ -69,3 +98,21 @@ def levelorder(rootNode):
                 queue.enqueue(root.value.leftChild)
             if (root.value.rightChild is not None):
                 queue.enqueue(root.value.rightChild)
+    
+def deleteBST(root):
+    root.leftChild = None
+    root.rightChild = None
+    root.data = None
+
+
+newBst = TreeNode(12)
+insertNode(newBst,10)
+insertNode(newBst,20)
+insertNode(newBst,60)
+insertNode(newBst,80)
+insertNode(newBst,40)
+insertNode(newBst,50)
+
+insertNode(newBst,30)
+insertNode(newBst,70)
+inorder(newBst)

@@ -1,4 +1,4 @@
-import Tree.Binary_Tree.QueueLinkedList as QueueLL
+import QueueLinkedList as QueueLL
 
 class TreeNode:
     def __init__(self,data):

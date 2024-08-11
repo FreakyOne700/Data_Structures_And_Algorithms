@@ -1,4 +1,4 @@
-import Binary_Tree.QueueLinkedList as QueueLL
+import QueueLinkedList as QueueLL
 
 class AVLNode:
     def __init__(self,data) -> None:
